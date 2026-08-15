@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.ObjectModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,8 +15,10 @@ namespace Ch01
     // MainWindow 클래스: 화면(창) 하나를 나타내는 클래스입니다.
     public partial class MainWindow : Window
     {
-        // CarList 속성: 호출될 때마다 새로운 MyList(자동차 목록)를 생성해서 반환합니다.
-        public MyList CarList => new MyList();
+        // CarList 속성: 자동차 목록을 보관합니다. 생성자에서 한 번만 생성해 저장하고,
+        // 이후 Button_Click에서 같은 인스턴스에 항목을 추가/제거합니다.
+        // (매번 새로 생성하면 ObservableCollection의 변경 알림이 화면과 끊어지므로 주의)
+        public MyList CarList { get; set; }
 
         // 생성자: 창이 생성될 때 실행되는 초기화 코드입니다.
         public MainWindow()
@@ -25,7 +28,16 @@ namespace Ch01
 
             // 이 창의 DataContext(데이터 연결 대상)를 CarList로 설정합니다.
             // 이렇게 하면 XAML에서 CarList의 데이터를 바인딩해서 화면에 표시할 수 있습니다.
+            CarList = new MyList();
             this.DataContext = CarList;
+        }
+
+        // "원소 추가" 버튼 클릭 이벤트 핸들러:
+        // CarList(ObservableCollection)에 새 Car를 추가하면 변경 알림이 발생해
+        // 화면의 ListBox/DataGrid 등이 자동으로 갱신됩니다.
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            CarList.Add(new Car { Name = "임시차", Make = "임시명" });
         }
     }
 
@@ -48,8 +60,9 @@ namespace Ch01
     }
 
     // MyList 클래스: Car 객체들을 담는 리스트 클래스입니다.
-    // List<Car>를 상속받아 자동차 목록 기능을 그대로 사용합니다.
-    public class MyList : List<Car>
+    // ObservableCollection<Car>를 상속받아, 항목 추가/삭제 시 변경 알림(INotifyCollectionChanged)을
+    // 자동으로 발생시켜 바인딩된 UI가 실시간으로 갱신되도록 합니다.
+    public class MyList : ObservableCollection<Car>
     {
         // 생성자: 리스트가 생성될 때 기본 자동차 데이터를 미리 추가합니다.
         public MyList()

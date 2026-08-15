@@ -39,9 +39,23 @@
                 <!-- Count 값을 가로 스크롤바 형태로 시각화 -->
                 <ScrollBar Maximum="10" Value="{Binding Count, Mode=OneWay}" Orientation="Horizontal" />
 
-                <!-- DataContext 자체를 ItemsSource로 사용하여 목록 표시 -->
+                <!-- DataContext 자체(CarList)를 ItemsSource로 사용하여 목록 표시 -->
                 <ListBox ItemsSource="{Binding}">
+                    <!-- 각 Car 항목을 "이름 + 버튼 + 제조사"가 한 줄에 나오는 형태로 표시 -->
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <TextBlock Text="{Binding Name}"/>
+                                <Button Content="Click"/>
+                                <TextBlock Text="{Binding Make}"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                 </ListBox>
+
+                <!-- 클릭 시 코드비하인드의 Button_Click 실행: CarList에 새 Car를 추가하고 -->
+                <!-- ObservableCollection의 변경 알림 덕분에 위 ListBox/DataGrid가 즉시 갱신됨 -->
+                <Button Click="Button_Click">원소 추가</Button>
 
                 <!-- 리소스에 등록한 "cars" 컬렉션을 데이터그리드로 표시 -->
                 <DataGrid ItemsSource="{Binding Source={StaticResource cars}}"/>
