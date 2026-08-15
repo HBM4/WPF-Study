@@ -6,8 +6,60 @@
         xmlns:local="clr-namespace:Ch01"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel>
-        <Button>My Button</Button>
-        <TextBox>My Text</TextBox>
-    </StackPanel>
+
+    <!-- 윈도우 전역에서 재사용할 리소스(정적 데이터) 정의 -->
+    <Window.Resources>
+        <!-- Car 객체 2개를 담은 MyList 컬렉션을 "cars"라는 키로 등록 -->
+        <local:MyList x:Key="cars">
+            <local:Car Name="임시생성차1" Make="SS"/>
+            <local:Car Name="임시생성차2" Make="SS"/>
+        </local:MyList>
+
+        <!-- 단일 Car 객체를 "car"라는 키로 등록 -->
+        <local:Car Name="한대차" Make="현대" x:Key="car"/>
+    </Window.Resources>
+
+    <Grid>
+        <!-- 내용이 창 크기를 넘어가면 스크롤 가능하도록 감싸는 컨테이너 -->
+        <ScrollViewer>
+            <!-- 자식 요소들을 세로로 순서대로 배치 -->
+            <StackPanel>
+                <!-- 단순 텍스트 표시용 라벨 -->
+                <TextBlock Text="test textblock"/>
+
+                <!-- DataContext의 Count 값을 표시(단방향 바인딩, 편집해도 소스에 반영 안 됨) -->
+                <TextBox Text="{Binding Count, Mode=OneWay}"/>
+
+                <!-- Count 값을 0~10 범위의 슬라이더로 시각화 -->
+                <Slider Maximum="10" Value="{Binding Count, Mode=OneWay}"/>
+
+                <!-- Count 값을 진행률 표시줄로 시각화 -->
+                <ProgressBar Height="20" Maximum="10" Value="{Binding Count, Mode=OneWay}"/>
+
+                <!-- Count 값을 가로 스크롤바 형태로 시각화 -->
+                <ScrollBar Maximum="10" Value="{Binding Count, Mode=OneWay}" Orientation="Horizontal" />
+
+                <!-- DataContext 자체(CarList)를 ItemsSource로 사용하여 목록 표시 -->
+                <ListBox ItemsSource="{Binding}">
+                    <!-- 각 Car 항목을 "이름 + 버튼 + 제조사"가 한 줄에 나오는 형태로 표시 -->
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <TextBlock Text="{Binding Name}"/>
+                                <Button Content="Click"/>
+                                <TextBlock Text="{Binding Make}"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <!-- 클릭 시 코드비하인드의 Button_Click 실행: CarList에 새 Car를 추가하고 -->
+                <!-- ObservableCollection의 변경 알림 덕분에 위 ListBox/DataGrid가 즉시 갱신됨 -->
+                <Button Click="Button_Click">원소 추가</Button>
+
+                <!-- 리소스에 등록한 "cars" 컬렉션을 데이터그리드로 표시 -->
+                <DataGrid ItemsSource="{Binding Source={StaticResource cars}}"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </Window>
