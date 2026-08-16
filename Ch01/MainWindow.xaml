@@ -17,6 +17,22 @@
 
         <!-- 단일 Car 객체를 "car"라는 키로 등록 -->
         <local:Car Name="한대차" Make="현대" x:Key="car"/>
+
+        <!-- Style 실습: TargetType만 지정 → 암시적(implicit) 스타일. -->
+        <!-- 이 창에 있는 모든 Button에 Style 속성 지정 없이도 자동 적용됨 -->
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Background" Value="Orange"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+
+        <!-- Style 실습: x:Key 지정 → 명시적(explicit) 스타일. -->
+        <!-- Style="{StaticResource btnStyle}"로 직접 지정한 Button에만 적용됨 -->
+        <Style x:Key="btnStyle" TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Background" Value="LightGreen"/>
+            <Setter Property="Padding" Value="8"/>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -55,10 +71,47 @@
 
                 <!-- 클릭 시 코드비하인드의 Button_Click 실행: CarList에 새 Car를 추가하고 -->
                 <!-- ObservableCollection의 변경 알림 덕분에 위 ListBox/DataGrid가 즉시 갱신됨 -->
-                <Button Click="Button_Click">원소 추가</Button>
+                <Button Click="Button_Click" Content="원소 추가">
+                    <!-- Button.Template: 버튼의 "생김새"를 직접 새로 그리는 부분.
+                         원래는 회색 사각형 버튼이 나오지만, 여기서는 주황색 타원 모양으로 바꿔서 보여줌.
+                         (버튼을 누르면 Button_Click이 실행되는 동작 자체는 그대로 유지됨) -->
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <!-- Grid: 안에 있는 도형(타원)과 글자(ContentPresenter)를 같은 자리에 겹쳐서 배치하는 틀 -->
+                            <Grid>
+                                <!-- Ellipse: 버튼 배경으로 쓸 주황색 타원(알약 모양)을 그림 -->
+                                <Ellipse Fill="Orange" Width="150" Height="25"/>
+                                <!-- ContentPresenter: 버튼에 적힌 글자("원소 추가")를 타원 한가운데에 표시함 -->
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
 
                 <!-- 리소스에 등록한 "cars" 컬렉션을 데이터그리드로 표시 -->
                 <DataGrid ItemsSource="{Binding Source={StaticResource cars}}"/>
+
+                <!-- Style 실습: 암시적 스타일 / 명시적 스타일 / 인라인 스타일 비교 -->
+                <Grid>
+                    <StackPanel>
+                        <!-- Width를 직접 지정하면 암시적 스타일의 Width Setter보다 우선 적용됨(Background/Padding은 스타일값 유지) -->
+                        <Button Content="Click1" Width="100"/>
+                        <Button Content="Click2" Width="100"/>
+                        <!-- 아무 것도 지정하지 않으면 암시적 스타일(Width=200, Orange)이 그대로 적용됨 -->
+                        <Button Content="Click3"/>
+                        <!-- 명시적 스타일(btnStyle)을 Style 속성으로 지정 -->
+                        <Button Content="Click4" Style="{StaticResource btnStyle}"/>
+                        <Button Content="Click5" Style="{StaticResource btnStyle}"/>
+                        <!-- Button.Style 안에 스타일을 직접 정의(인라인)하면 리소스의 스타일보다 우선 적용됨 -->
+                        <Button Content="Click6">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Width" Value="300"/>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
             </StackPanel>
         </ScrollViewer>
     </Grid>
