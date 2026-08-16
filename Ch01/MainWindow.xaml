@@ -55,7 +55,22 @@
 
                 <!-- 클릭 시 코드비하인드의 Button_Click 실행: CarList에 새 Car를 추가하고 -->
                 <!-- ObservableCollection의 변경 알림 덕분에 위 ListBox/DataGrid가 즉시 갱신됨 -->
-                <Button Click="Button_Click">원소 추가</Button>
+                <Button Click="Button_Click" Content="원소 추가">
+                    <!-- Button.Template: 버튼의 "생김새"를 직접 새로 그리는 부분.
+                         원래는 회색 사각형 버튼이 나오지만, 여기서는 주황색 타원 모양으로 바꿔서 보여줌.
+                         (버튼을 누르면 Button_Click이 실행되는 동작 자체는 그대로 유지됨) -->
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <!-- Grid: 안에 있는 도형(타원)과 글자(ContentPresenter)를 같은 자리에 겹쳐서 배치하는 틀 -->
+                            <Grid>
+                                <!-- Ellipse: 버튼 배경으로 쓸 주황색 타원(알약 모양)을 그림 -->
+                                <Ellipse Fill="Orange" Width="150" Height="25"/>
+                                <!-- ContentPresenter: 버튼에 적힌 글자("원소 추가")를 타원 한가운데에 표시함 -->
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
 
                 <!-- 리소스에 등록한 "cars" 컬렉션을 데이터그리드로 표시 -->
                 <DataGrid ItemsSource="{Binding Source={StaticResource cars}}"/>
