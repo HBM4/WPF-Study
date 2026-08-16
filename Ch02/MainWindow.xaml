@@ -1,0 +1,50 @@
+﻿<Window x:Class="Ch02.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ch02"
+        xmlns:data="clr-namespace:Ch02"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <Button Width="150">
+                Hello!
+            </Button>
+            <Button Width="150" Content="{Binding DataStr}">
+            </Button>
+            <Button >
+                <Button.Width>
+                    150
+                </Button.Width>
+                <Button.Content>
+                    Hello!
+                </Button.Content>
+            </Button>
+            <Button >
+                <Button.Width>
+                    150
+                </Button.Width>
+                <Button.Content>
+                    <data:BindData DataStr="aaa" DataInt="0"/>
+                </Button.Content>
+            </Button>
+            <Button >
+                <Button.Width>
+                    150
+                </Button.Width>
+                <Button.Content>
+                    <data:BindData />
+                </Button.Content>
+            </Button>
+            <Button Width="150" Content="{Binding DataStr}">
+                <Button.DataContext>
+                    <data:BindData/>
+                </Button.DataContext>
+            </Button>
+            <Button x:Name="btn" Width="150" Content="{Binding DataStr}">
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
