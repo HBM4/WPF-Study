@@ -17,6 +17,22 @@
 
         <!-- 단일 Car 객체를 "car"라는 키로 등록 -->
         <local:Car Name="한대차" Make="현대" x:Key="car"/>
+
+        <!-- Style 실습: TargetType만 지정 → 암시적(implicit) 스타일. -->
+        <!-- 이 창에 있는 모든 Button에 Style 속성 지정 없이도 자동 적용됨 -->
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Background" Value="Orange"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+
+        <!-- Style 실습: x:Key 지정 → 명시적(explicit) 스타일. -->
+        <!-- Style="{StaticResource btnStyle}"로 직접 지정한 Button에만 적용됨 -->
+        <Style x:Key="btnStyle" TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Background" Value="LightGreen"/>
+            <Setter Property="Padding" Value="8"/>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -74,6 +90,28 @@
 
                 <!-- 리소스에 등록한 "cars" 컬렉션을 데이터그리드로 표시 -->
                 <DataGrid ItemsSource="{Binding Source={StaticResource cars}}"/>
+
+                <!-- Style 실습: 암시적 스타일 / 명시적 스타일 / 인라인 스타일 비교 -->
+                <Grid>
+                    <StackPanel>
+                        <!-- Width를 직접 지정하면 암시적 스타일의 Width Setter보다 우선 적용됨(Background/Padding은 스타일값 유지) -->
+                        <Button Content="Click1" Width="100"/>
+                        <Button Content="Click2" Width="100"/>
+                        <!-- 아무 것도 지정하지 않으면 암시적 스타일(Width=200, Orange)이 그대로 적용됨 -->
+                        <Button Content="Click3"/>
+                        <!-- 명시적 스타일(btnStyle)을 Style 속성으로 지정 -->
+                        <Button Content="Click4" Style="{StaticResource btnStyle}"/>
+                        <Button Content="Click5" Style="{StaticResource btnStyle}"/>
+                        <!-- Button.Style 안에 스타일을 직접 정의(인라인)하면 리소스의 스타일보다 우선 적용됨 -->
+                        <Button Content="Click6">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Width" Value="300"/>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
             </StackPanel>
         </ScrollViewer>
     </Grid>
