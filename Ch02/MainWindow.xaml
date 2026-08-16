@@ -7,14 +7,25 @@
         xmlns:data="clr-namespace:Ch02"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <!-- data 접두사(위 xmlns:data)는 BindData 클래스(Ch02 네임스페이스)를
+         XAML에서 <data:BindData/> 형태로 쓰기 위한 선언입니다. -->
     <Grid>
         <StackPanel>
+            <!-- ① 가장 기본 형태: Button 태그 사이에 글자를 직접 적으면 그게 버튼 내용(Content)이 됩니다. -->
             <Button Width="150">
                 Hello!
             </Button>
+
+            <!-- ② 바인딩으로 내용 채우기: Content="{Binding DataStr}"는
+                 "이 버튼의 DataContext가 가진 DataStr 속성 값을 가져와서 보여줘"라는 뜻입니다.
+                 이 창 전체의 DataContext는 코드비하인드에서 new BindData("12345", 200)으로 설정했으므로
+                 여기에는 "12345"가 표시됩니다. -->
             <Button Width="150" Content="{Binding DataStr}">
             </Button>
-            <Button >
+
+            <!-- ③ 속성을 태그로 풀어서 쓰는 방법: Width="150" / Content="Hello!" 를
+                 <Button.Width>, <Button.Content> 자식 태그로 똑같이 표현할 수 있습니다. -->
+            <Button>
                 <Button.Width>
                     150
                 </Button.Width>
@@ -22,7 +33,12 @@
                     Hello!
                 </Button.Content>
             </Button>
-            <Button >
+
+            <!-- ④ 버튼 내용(Content)에 문자열이 아니라 객체를 직접 넣는 예시.
+                 <data:BindData DataStr="aaa" DataInt="0"/> 는 BindData 객체를 새로 만들어서
+                 버튼의 Content로 넣는 것과 같습니다. Content가 문자열이 아니면
+                 WPF는 기본적으로 ToString() 결과를 화면에 표시하므로 "[aaa] : [0]"이 보입니다. -->
+            <Button>
                 <Button.Width>
                     150
                 </Button.Width>
@@ -30,19 +46,31 @@
                     <data:BindData DataStr="aaa" DataInt="0"/>
                 </Button.Content>
             </Button>
-            <Button >
+
+            <!-- ⑤ 위와 같은 방식이지만 속성을 지정하지 않아 기본 생성자(BindData())가 호출됩니다.
+                 기본값이 "none", 0 이므로 화면에는 "[none] : [0]"이 보입니다. -->
+            <Button>
                 <Button.Width>
                     150
                 </Button.Width>
                 <Button.Content>
-                    <data:BindData />
+                    <data:BindData/>
                 </Button.Content>
             </Button>
+
+            <!-- ⑥ 버튼마다 DataContext를 직접 지정하는 예시.
+                 창 전체 DataContext와 상관없이 이 버튼만 새로운 BindData()(기본값 "none", 0)를
+                 자신의 DataContext로 갖게 되고, Content="{Binding DataStr}"는 그 DataContext에서
+                 값을 찾으므로 "none"이 표시됩니다. -->
             <Button Width="150" Content="{Binding DataStr}">
                 <Button.DataContext>
                     <data:BindData/>
                 </Button.DataContext>
             </Button>
+
+            <!-- ⑦ x:Name="btn"으로 이름을 지정해 코드비하인드(MainWindow.xaml.cs)에서
+                 btn.DataContext = new BindData("newbind", 500); 처럼 C# 코드로 직접 제어할 수 있습니다.
+                 따라서 이 버튼에는 "newbind"가 표시됩니다. -->
             <Button x:Name="btn" Width="150" Content="{Binding DataStr}">
             </Button>
         </StackPanel>
