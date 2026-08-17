@@ -12,6 +12,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
+            <!-- 바인딩 없이 고정 텍스트만 -->
             <GroupBox Header="BindData1">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Hello!"></TextBlock>
@@ -19,6 +20,7 @@
                     <TextBlock Text="100"></TextBlock>
                 </StackPanel>
             </GroupBox>
+            <!-- 창 DataContext(코드비하인드의 bd) 사용 -->
             <GroupBox Header="BindData2">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding DataStr}" ></TextBlock>
@@ -26,6 +28,7 @@
                     <TextBox Text="{Binding Path=DataInt}"></TextBox>
                 </StackPanel>
             </GroupBox>
+            <!-- GroupBox 자체에 DataContext를 따로 지정 -->
             <GroupBox Header="BindData3" >
                 <GroupBox.DataContext>
                     <local:BindData DataStr="Hi~" DataInt="500"/>
@@ -39,9 +42,11 @@
             <GroupBox Header="BindData4" >
 
                 <StackPanel Orientation="Horizontal">
+                    <!-- 창 DataContext 사용 -->
                     <TextBlock Text="{Binding DataStr}" ></TextBlock>
                     <Button Background="Pink" Content="Click"></Button>
                     <TextBox Text="{Binding Path=DataInt}">
+                        <!-- TextBox만 자기 DataContext로 덮어씀 -->
                         <TextBox.DataContext>
                             <local:BindData DataStr="ABCD" DataInt="-10"/>
                         </TextBox.DataContext>
@@ -49,6 +54,7 @@
                 </StackPanel>
             </GroupBox>
         </StackPanel>
+        <!-- Person 바인딩되는 이름/전화 입력 폼 -->
         <StackPanel Name="panel" Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
