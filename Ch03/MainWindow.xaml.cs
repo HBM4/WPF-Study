@@ -16,12 +16,16 @@ namespace Ch03
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Person per = new Person() { Name = "홍길동", Phone = "010-1111-1234" };
+
         public MainWindow()
         {
             InitializeComponent();
 
             BindData bd = new BindData("Hello!2", 200);
             this.DataContext = bd;
+
+            panel.DataContext = per;
         }
     }
 
@@ -40,5 +44,11 @@ namespace Ch03
             DataStr = s;
             DataInt = n;
         }
+    }
+
+    public class Person
+    {
+        public string Name { get; set; }
+        public string Phone { get; set; }
     }
 }

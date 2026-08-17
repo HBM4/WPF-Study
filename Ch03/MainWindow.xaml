@@ -7,7 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <StackPanel >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
             <GroupBox Header="BindData1">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Hello!"></TextBlock>
@@ -44,6 +48,22 @@
                     </TextBox>
                 </StackPanel>
             </GroupBox>
+        </StackPanel>
+        <StackPanel Name="panel" Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="5" Orientation="Horizontal">
+                    <Label >이름(_N):</Label>
+                    <TextBox Text="{Binding Path=Name}" Width="120"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="5" Orientation="Horizontal">
+                    <Label >전화(_P):</Label>
+                    <TextBox Text="{Binding Path=Phone}" Width="120"/>
+                </StackPanel>
+            </Grid>
         </StackPanel>
     </Grid>
 </Window>
