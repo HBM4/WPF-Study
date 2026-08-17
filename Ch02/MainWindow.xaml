@@ -9,6 +9,16 @@
         Title="MainWindow" Height="450" Width="800">
     <!-- data 접두사(위 xmlns:data)는 BindData 클래스(Ch02 네임스페이스)를
          XAML에서 <data:BindData/> 형태로 쓰기 위한 선언입니다. -->
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="5,3"></Setter>
+        </Style>
+
+        <!-- rbd 라는 이름(Key)으로 BindData 객체를 창의 리소스로 등록합니다.
+             리소스는 DataContext와 상관없이 "{StaticResource rbd}" 라는 이름으로
+             XAML 어디서든 꺼내 쓸 수 있는, 이 창 전용의 "공용 데이터 창고" 같은 것입니다. -->
+        <data:BindData x:Key="rbd" DataStr="abcde" DataInt="100"/>
+    </Window.Resources>
     <Grid>
         <StackPanel>
             <!-- ① 가장 기본 형태: Button 태그 사이에 글자를 직접 적으면 그게 버튼 내용(Content)이 됩니다. -->
@@ -73,6 +83,72 @@
                  따라서 이 버튼에는 "newbind"가 표시됩니다. -->
             <Button x:Name="btn" Width="150" Content="{Binding DataStr}">
             </Button>
+
+            <!-- 파란색 사각형(Rectangle)을 구분선처럼 사용해 예제들을 시각적으로 나누었습니다.
+                 바인딩과는 상관없는 순수 그리기 요소입니다. -->
+            <Rectangle Height="5" Fill="Blue"/>
+
+            <!-- ⑧ Content="{Binding Path=DataStr}"를 태그로 풀어서 쓴 것과 같습니다.
+                 <Binding> 태그 안에 <Binding.Path>로 경로를 지정하며,
+                 결과적으로 ②번 버튼과 완전히 동일하게 동작합니다(창의 DataContext인 "12345" 표시). -->
+            <Button Width="150">
+                <Button.Content>
+                    <Binding>
+                        <Binding.Path>
+                            DataStr
+                        </Binding.Path>
+                    </Binding>
+                </Button.Content>
+            </Button>
+
+            <!-- 여백을 위한 구분선(Border)입니다. -->
+            <Border Height="10"/>
+
+            <!-- ⑨ Source={StaticResource rbd} : DataContext 대신 특정 리소스(rbd)를 데이터 원본으로 지정합니다.
+                 즉 "이 버튼의 DataContext가 무엇이든 상관없이, Window.Resources에 등록해둔 rbd의 DataStr을 써라"는 뜻입니다.
+                 rbd는 DataStr="abcde" 이므로 "abcde"가 표시됩니다. -->
+            <Button Content="{Binding Path=DataStr,Source={StaticResource rbd}}"> </Button>
+
+            <!-- ⑩ 위 ⑨번을 태그(요소) 형태로 완전히 풀어 쓴 예시입니다.
+                 <Binding.Source> 안에 <StaticResource ResourceKey="rbd"/>를 넣어 같은 의미를 표현합니다.
+                 결과는 ⑨번과 동일하게 "abcde"가 표시됩니다. -->
+            <Button>
+                <Button.Content>
+                    <Binding>
+                        <Binding.Path>
+                            DataStr
+                        </Binding.Path>
+                        <Binding.Source>
+                            <StaticResource>
+                                <StaticResource.ResourceKey>
+                                    rbd
+                                </StaticResource.ResourceKey>
+                            </StaticResource>
+                        </Binding.Source>
+                    </Binding>
+                </Button.Content>
+            </Button>
+
+            <!-- ⑪ TextBox는 사용자가 값을 "입력"할 수 있는 컨트롤입니다.
+                 Source={StaticResource rbd}로 rbd의 DataStr과 연결하고,
+                 UpdateSourceTrigger=PropertyChanged를 지정했으므로
+                 (기본값인 "포커스를 잃을 때"가 아니라) 글자를 입력하는 즉시 rbd.DataStr 값이 바뀝니다.
+                 즉, 위 ⑨・⑩번 버튼과 이 TextBox는 모두 같은 rbd 객체를 바라보고 있어서
+                 이 TextBox에 글자를 입력하면 (다시 그려질 경우) 버튼들의 내용도 함께 바뀔 수 있습니다. -->
+            <TextBox Text="{Binding DataStr, Source={StaticResource rbd}, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <!-- ⑫ 이 TextBox는 창의 리소스(rbd)나 DataContext를 쓰지 않고,
+                 <Binding.Source> 안에 새 BindData 객체를 직접 만들어 자기 자신만의 데이터 원본으로 삼습니다.
+                 다른 컨트롤과 전혀 공유되지 않는, 이 TextBox 전용 데이터이므로 처음엔 "Hello!"가 표시됩니다. -->
+            <TextBox>
+                <TextBox.Text>
+                    <Binding Path="DataStr">
+                        <Binding.Source>
+                            <data:BindData DataStr="Hello!" DataInt="10"/>
+                        </Binding.Source>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </StackPanel>
     </Grid>
 </Window>
