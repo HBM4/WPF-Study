@@ -1,0 +1,48 @@
+﻿<Window x:Class="Ch03_3.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ch03_3"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <StackPanel DataContext="{Binding SelectedItem, ElementName=lb}" Grid.Row="0" Grid.Column="0">
+            <TextBlock Text="이름:"/>
+            <TextBox Text="{Binding Name}"/>
+            <TextBlock Text="나이:"/>
+            <TextBox Text="{Binding Age}"/>
+            <TextBlock Text="색상:"/>
+            <TextBlock Text="{Binding Clr}"/>
+            <Border BorderThickness="1" Height="15"/>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="1"/>
+
+        <ListBox x:Name="lb"  ItemsSource="{Binding List}" Grid.Row="1" IsSynchronizedWithCurrentItem="True">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <TextBlock> 이름:</TextBlock>
+                        <TextBlock Text="{Binding Name}"> </TextBlock>
+                        <TextBlock> 나이:</TextBlock>
+                        <TextBlock Text="{Binding Age}"> </TextBlock>
+                        <TextBlock> 색상:</TextBlock>
+                        <TextBlock Text="{Binding Clr}"> </TextBlock>
+                        <Button Click="Button_Click_2"> 정보 확인 </Button>
+                    </TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <ListBox ItemsSource="{Binding List}" Grid.Row="1" Grid.Column="1" IsSynchronizedWithCurrentItem="True"/>
+    </Grid>
+</Window>
